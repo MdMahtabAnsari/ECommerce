@@ -144,6 +144,10 @@ const valiadteGenerateOTP =async (req, res, next) => {
             res.status(400).send({ message: "invalid userId" });
             return;
         }
+        if (user.verified) {
+            res.status(400).send({ message: "user already verified" });
+            return;
+        }
         next();
     }
     catch (error) {
