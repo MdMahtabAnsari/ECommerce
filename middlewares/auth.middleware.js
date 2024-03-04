@@ -69,6 +69,7 @@ const signInValidation = (req, res, next) => {
         res.status(400).send({ message: "password is require" });
         return;
     }
+    
     next()
 }
 
@@ -111,11 +112,52 @@ const isAdmin = async (req, res, next) => {
     }
 }
 
+const validateOTP = async(req, res, next) => {
+    try {
+        if(!req.body.userId){
+            res.status(400).send({message:"userId is require"});
+            return;
+        }
+        if (!req.body.otp) {
+            res.status(400).send({ message: "otp is require" });
+            return;
+        }
+        const user = await User.findOne({userId:req.body.userId});
+        if(!user){
+            res.status(400).send({message:"invalid userId"});
+            return;
+        }
+        next();
+    }
+    catch (error) {
+        res.status(500).send({ message: "something went wrong", error: error.message });
+    }
+}
+const valiadteGenerateOTP =async (req, res, next) => {
+    try {
+        if (!req.body.userId) {
+            res.status(400).send({ message: "userId is require" });
+            return;
+        }
+        const user = await User.findOne({ userId:req.body.userId });
+        if (!user) {
+            res.status(400).send({ message: "invalid userId" });
+            return;
+        }
+        next();
+    }
+    catch (error) {
+        res.status(500).send({ message: "something went wrong", error: error.message });
+    }
+}
+
 module.exports = {
     signUpValidator: signUpValidator,
     emailValidation: emailValidation,
     isUserExist: isUserExist,
     signInValidation: signInValidation,
     verifyToken: verifyToken,
-    isAdmin: isAdmin
+    isAdmin: isAdmin,
+    validateOTP: validateOTP,
+    valiadteGenerateOTP: valiadteGenerateOTP
 }

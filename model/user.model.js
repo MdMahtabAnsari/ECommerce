@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique:true
     },
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    secret: {
+        type: String,
+        default: null
+    },
     userType: {
         type: String,
         enum: ["admin", "customer"],
